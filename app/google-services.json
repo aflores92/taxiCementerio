@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "12600618548",
+    "firebase_url": "https://taxicementerio.firebaseio.com",
+    "project_id": "taxicementerio",
+    "storage_bucket": "taxicementerio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12600618548:android:4bb4afd808a81055",
+        "android_client_info": {
+          "package_name": "com.andresflores.taxicementerio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "12600618548-sh51t3bicjdpoume67lpf67mlm4nqvo9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.andresflores.taxicementerio",
+            "certificate_hash": "7b1bc69dceaf4a8b03b1268d055fd33ebc401063"
+          }
+        },
+        {
+          "client_id": "12600618548-qrn62e2s2jl20e88s81liansq03b6dc9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZIQI7mNMIQeIlX9-B0tQ1p_oaDA_DeM0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "12600618548-qrn62e2s2jl20e88s81liansq03b6dc9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
