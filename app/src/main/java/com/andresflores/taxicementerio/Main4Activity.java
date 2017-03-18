@@ -18,7 +18,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-public class Main4Activity extends AppCompatActivity {
+public class Main4Activity extends Activity {
 
     private FirebaseAuth mAuth;
     private EditText textEmail;
@@ -66,6 +66,16 @@ public class Main4Activity extends AppCompatActivity {
                             progressDialog.dismiss();
                             if (task.isSuccessful()) {
                                 Toast.makeText(Main4Activity.this, "Login succesful", Toast.LENGTH_SHORT).show();
+
+
+                                btnRegister.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(Main4Activity.this, MapsActivity.class);
+                                        startActivity(intent);
+
+                                    }
+                                });
 
 
                             } else

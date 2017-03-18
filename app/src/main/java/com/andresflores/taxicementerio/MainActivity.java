@@ -1,5 +1,6 @@
 package com.andresflores.taxicementerio;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     Switch PasajeroOTaxistaSwitch;
     Button mRegisterButton;
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mRegisterButton = (Button) findViewById(R.id.button2);
-        getSupportActionBar().hide();
+        /*getSupportActionBar().hide();*/
 
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override

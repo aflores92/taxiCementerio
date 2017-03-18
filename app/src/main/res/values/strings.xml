@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">taxiCementerio</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
