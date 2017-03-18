@@ -10,4 +10,53 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.andresflores.taxicementerio.Main2Activity">
 
+
+    <EditText
+        android:id="@+id/etxt_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:hint="type your name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/etxt_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etxt_name"
+        android:layout_centerHorizontal="true"
+        android:hint="Type your email"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/etxt_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/etxt_email"
+        android:layout_alignRight="@+id/etxt_email"
+        android:layout_below="@+id/etxt_email"
+        android:hint="Type your password"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etxt_password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="23dp"
+        android:text="Register" />
+
+    <Button
+        android:text="Seleccione Aqui Para Ingresar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button3"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/btn_register"
+        android:layout_centerHorizontal="true" />
+
+
+
 </RelativeLayout>
