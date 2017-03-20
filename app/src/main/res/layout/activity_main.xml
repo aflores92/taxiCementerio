@@ -10,18 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.andresflores.taxicementerio.MainActivity"
-    android:backgroundTint="@android:color/background_light"
     android:background="@android:color/background_light">
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/logo"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="13dp"
-        android:id="@+id/imageView"
-        android:contentDescription="" />
 
     <Switch
         android:layout_width="wrap_content"
@@ -32,6 +21,8 @@
         android:textColor="@color/common_google_signin_btn_text_dark_focused" />
 
     <TextView
+
+        android:background="@color/wallet_dim_foreground_holo_dark"
         android:text="Taxista"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,25 +32,10 @@
         android:layout_marginStart="10dp"
         android:id="@+id/textView"
         android:textSize="24sp"
-        android:textColor="?android:attr/textColorPrimaryDisableOnly"
+        android:textColor="?android:attr/textColorPrimaryInverse"
         android:layout_alignTop="@+id/TaxistaOPasajeroSwitch"
         android:textStyle="normal|bold" />
 
-
-    <TextView
-        android:text="Pasajero"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView2"
-        android:textSize="24sp"
-        android:textColor="?android:attr/textColorPrimaryDisableOnly"
-        android:textStyle="normal|bold"
-        android:layout_marginRight="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_alignTop="@+id/TaxistaOPasajeroSwitch"
-        android:layout_toLeftOf="@+id/TaxistaOPasajeroSwitch"
-        android:layout_toStartOf="@+id/TaxistaOPasajeroSwitch"
-        tools:text="Pasajero" />
 
     <Button
         android:text="Button"
@@ -69,6 +45,30 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="31dp"
         android:id="@+id/button2" />
+
+    <TextView
+        android:text="Pasajero"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:textSize="24sp"
+        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textStyle="normal|bold"
+        android:layout_marginRight="16dp"
+        tools:text="Pasajero"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/button2" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/logo"
+        android:layout_marginTop="13dp"
+        android:id="@+id/imageView"
+        android:contentDescription=""
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/cast_expanded_controller_bg_gradient_light" />
 
 
 </RelativeLayout>
