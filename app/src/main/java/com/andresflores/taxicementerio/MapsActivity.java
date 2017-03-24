@@ -45,7 +45,7 @@ import com.google.firebase.database.ValueEventListener;
 import static com.google.ads.AdRequest.LOGTAG;
 
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
 
     private LocationManager locationManager;
@@ -58,37 +58,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser(); //Obtener el Usuario con el que estoy logueado en la aplicacion
     private DatabaseReference mUserData = mUserRef.child(user.getUid()); //Obtener llave unica del Usuario
 
-    //GPS
-
-    private GoogleApiClient apiClient;
-    private TextView lblLatitud;
-    private TextView lblLongitud;
-    private ToggleButton btnActualizar;
-    private static final int PETICION_PERMISO_LOCALIZACION = 101;
-
-    //Propiedades GPS
-    double longitudeGPS, latitudeGPS;
-    TextView longitudeValueGPS, latitudeValueGPS;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
-        //GPS
-
-        lblLatitud = (TextView) findViewById(R.id.lblLatitud);
-        lblLongitud = (TextView) findViewById(R.id.lblLongitud);
-        btnActualizar = (ToggleButton) findViewById(R.id.btnActualizar);
-
-        apiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addConnectionCallbacks(this)
-                .addApi(LocationServices.API)
-                .build();
-
-
-        ///
 
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
@@ -123,73 +96,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private void updateUI(Location loc) {
-        if (loc != null) {
-            lblLatitud.setText("Latitud: " + String.valueOf(loc.getLatitude()));
-            lblLongitud.setText("Longitud: " + String.valueOf(loc.getLongitude()));
-        } else {
-            lblLatitud.setText("Latitud: (desconocida)");
-            lblLongitud.setText("Longitud: (desconocida)");
-        }
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult result) {
-        //Se ha producido un error que no se puede resolver automáticamente
-        //y la conexión con los Google Play Services no se ha establecido.
-
-        Log.e(LOGTAG, "Error grave al conectar con Google Play Services");
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        //Conectado correctamente a Google Play Services
-
-        if (ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PETICION_PERMISO_LOCALIZACION);
-        } else {
-
-            Location lastLocation =
-                    LocationServices.FusedLocationApi.getLastLocation(apiClient);
-
-            updateUI(lastLocation);
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        //Se ha interrumpido la conexión con Google Play Services
-
-        Log.e(LOGTAG, "Se ha interrumpido la conexión con Google Play Services");
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == PETICION_PERMISO_LOCALIZACION) {
-            if (grantResults.length == 1
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                //Permiso concedido
-
-                @SuppressWarnings("MissingPermission")
-                Location lastLocation =
-                        LocationServices.FusedLocationApi.getLastLocation(apiClient);
-
-                updateUI(lastLocation);
-
-            } else {
-                //Permiso denegado:
-                //Deberíamos deshabilitar toda la funcionalidad relativa a la localización.
-
-                Log.e(LOGTAG, "Permiso denegado");
-            }
-        }
-    }
-
 
 
 
@@ -202,7 +108,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             geoFire.setLocation("firabase-hq", new GeoLocation(location.getLatitude(),location.getLongitude()));
 
-
         }
 
     }
@@ -213,12 +118,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
          if(requestActive == false) {
 
 
-
-
                      mUserData.setValue(user); //Enviar data a Firebase
                      sendData.setText("Cancelar Taxista"); //Cambiar texto del Boton
                      requestActive = true;
-
 
          }
 
