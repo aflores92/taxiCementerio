@@ -19,6 +19,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Main2Activity extends Activity  {
 
@@ -32,6 +35,9 @@ public class Main2Activity extends Activity  {
     private TextView mTextLogin;
     private FirebaseAuth.AuthStateListener mAuthListener;
     Button mLoginButton;
+
+    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference mUserRef = mRootRef.child("usuario");
 
 
     @Override
@@ -68,11 +74,11 @@ public class Main2Activity extends Activity  {
 
     private void startRegister() {
         final String name = mNameField.getText().toString().trim();
-        String email = mEmailFiedl.getText().toString().trim();
-        String password = mPasswordField.getText().toString().trim();
+        final String email = mEmailFiedl.getText().toString().trim();
+        final String password = mPasswordField.getText().toString().trim();
 
         if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
-            mProgress.setMessage("Registering, please wait...");
+            mProgress.setMessage("Registrando, Espere Por Favor...");
             mProgress.show();
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -82,6 +88,11 @@ public class Main2Activity extends Activity  {
                             if (task.isSuccessful()) {
 
                                 String user_id = mAuth.getCurrentUser().getUid();
+                                DatabaseReference mData = mUserRef.child(user_id);
+                                mData.child("Nombre").setValue(name);
+                                mData.child("Email").setValue(email);
+                                mData.child("Pasword").setValue(password);
+                                mData.child("Tipo").setValue("Pasajero");
 
 
                                 Toast.makeText(Main2Activity.this, user_id, Toast.LENGTH_SHORT).show();

@@ -1,32 +1,18 @@
 package com.andresflores.taxicementerio;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -42,7 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import static com.google.ads.AdRequest.LOGTAG;
+
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
@@ -50,13 +36,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private LocationManager locationManager;
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference mUserRef = mRootRef.child("usuario");
+    private DatabaseReference mPedidosRef = mRootRef.child("Pedidos");
     private Button sendData;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance(); //variable que obtiene la autenticacion
     private GoogleMap map;
     private Boolean requestActive = false;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser(); //Obtener el Usuario con el que estoy logueado en la aplicacion
-    private DatabaseReference mUserData = mUserRef.child(user.getUid()); //Obtener llave unica del Usuario
+    private DatabaseReference mUserData = mPedidosRef.child(user.getUid()); //Obtener llave unica del Usuario
+    private DatabaseReference mLocation = mRootRef.child("Localizacion");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +76,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1, 1, this);
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-        if (location != null) {
+      //  if (location != null) {
 
             updateLocation(location);
-        }
-
+       // }0
     }
 
 
@@ -103,22 +89,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if(requestActive) {
 
-            DatabaseReference mUserGeo = mUserData.child("geofire");
+            DatabaseReference mUserGeo = mLocation.child("geofire");
+            mUserGeo.child("ID").setValue(user.getUid());
             GeoFire geoFire = new GeoFire(mUserGeo);
 
-            geoFire.setLocation("firabase-hq", new GeoLocation(location.getLatitude(),location.getLongitude()));
-
+            geoFire.setLocation("Localizacion", new GeoLocation(location.getLatitude(),location.getLongitude()));
+            mUserGeo.child(user.getUid());
         }
 
     }
 
     public void requestUber(View view){
 
-         user = mAuth.getCurrentUser();
+         /*user = mAuth.getCurrentUser();*/
          if(requestActive == false) {
 
+                        /*mUserData.setValue(user.getUid());*/
+                        String key= "USER_ID";
+                        mPedidosRef.child(key).setValue(user.getUid());
 
-                     mUserData.setValue(user); //Enviar data a Firebase
+                    // mData.setValue(user.getDisplayName()); //Enviar data a Firebase
+                  //   mData.setValue(user.getEmail()); //Enviar data a Firebase
+                  //   mUserData.child("tipo").setValue("pasajero");
                      sendData.setText("Cancelar Taxista"); //Cambiar texto del Boton
                      requestActive = true;
 
@@ -132,7 +124,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
              requestActive = false;
 
              //Queary NoSql para conseguir mi Pedido
-             Query myCurrentUser = mUserRef.child("usuarios").child(user.getUid()).orderByChild("driverRequest").equalTo(null);
+            // Query myCurrentUser = mPedidosRef.child("usuarios").child(user.getUid()).orderByChild("driverRequest").equalTo(null);
+             Query myCurrentUser = mPedidosRef.orderByChild("ID").equalTo(user.getUid());
 
              myCurrentUser.removeEventListener(new ValueEventListener() {
                  @Override
@@ -182,11 +175,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if(requestActive) {
 
-            DatabaseReference mUserGeo = mUserData.child("geofire");
+          /*  DatabaseReference mUserGeo = mUserData.child("geofire");
             GeoFire geoFire = new GeoFire(mUserGeo);
 
-            geoFire.setLocation("firabase-hq", new GeoLocation(location.getLatitude(),location.getLongitude()));
+            geoFire.setLocation("firabase-hq", new GeoLocation(location.getLatitude(),location.getLongitude()));*/
 
+            updateLocation(location);
 
         }
 

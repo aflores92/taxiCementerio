@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.andresflores.taxicementerio.Main2Activity"
     android:animationCache="true"
-    android:backgroundTint="@drawable/fondo">
+    android:background="@drawable/fondo">
 
 
     <EditText
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:hint="type your name"
+        android:hint="Ingrese Nombre"
         android:inputType="textPersonName" />
 
     <EditText
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etxt_name"
         android:layout_centerHorizontal="true"
-        android:hint="Type your email"
+        android:hint="Ingrese Correo"
         android:inputType="textEmailAddress" />
 
     <EditText
@@ -38,17 +38,8 @@
         android:layout_alignEnd="@+id/etxt_email"
         android:layout_alignRight="@+id/etxt_email"
         android:layout_below="@+id/etxt_email"
-        android:hint="Type your password"
+        android:hint="Ingrese Contraseña "
         android:inputType="textPassword" />
-
-    <Button
-        android:id="@+id/btn_register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/etxt_password"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="23dp"
-        android:text="Register" />
 
     <Button
         android:text="Seleccione Aqui Para Ingresar"
@@ -59,6 +50,14 @@
         android:layout_below="@+id/btn_register"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:text="Registrar"
+        android:layout_below="@+id/etxt_password"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

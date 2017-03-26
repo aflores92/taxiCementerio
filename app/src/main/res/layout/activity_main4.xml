@@ -8,11 +8,11 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/wallet_dim_foreground_holo_dark"
+    android:background="@drawable/fondo">
     tools:context="com.andresflores.taxicementerio.Main4Activity">
 
     <Button
-        android:text="login"
+        android:text="Ingresar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etxt_password"
@@ -20,28 +20,29 @@
         android:id="@+id/btn_login" />
 
     <EditText
+        android:hint="Ingrese Nombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
+        android:inputType="none"
         android:ems="10"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="51dp"
         android:layout_marginEnd="51dp"
-        android:id="@+id/etxt_email"
-        android:hint="Type Email" />
+        android:id="@+id/etxt_email" />
+
 
     <EditText
+        android:hint="Ingrese Contraseña"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
+        android:inputType="none"
         android:ems="10"
         android:id="@+id/etxt_password"
         android:layout_below="@+id/etxt_email"
         android:layout_alignLeft="@+id/etxt_email"
-        android:layout_alignStart="@+id/etxt_email"
-        android:hint="Type Password" />
+        android:layout_alignStart="@+id/etxt_email" />
 
 
 </RelativeLayout>
