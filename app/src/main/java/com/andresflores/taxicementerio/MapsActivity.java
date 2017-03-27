@@ -28,7 +28,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
@@ -44,6 +47,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser(); //Obtener el Usuario con el que estoy logueado en la aplicacion
     private DatabaseReference mUserData = mPedidosRef.child(user.getUid()); //Obtener llave unica del Usuario
     private DatabaseReference mLocation = mRootRef.child("Localizacion");
+    private DatabaseReference mPedidoU = mPedidosRef.push();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,12 +93,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if(requestActive) {
 
-            DatabaseReference mUserGeo = mLocation.child("geofire");
-            mUserGeo.child("ID").setValue(user.getUid());
+            DatabaseReference mUserGeo = mPedidoU.child("geofire");
+          //mUserGeo.child("ID").setValue(user.getUid());
             GeoFire geoFire = new GeoFire(mUserGeo);
 
             geoFire.setLocation("Localizacion", new GeoLocation(location.getLatitude(),location.getLongitude()));
-            mUserGeo.child(user.getUid());
+            //mUserGeo.child(user.getUid());
         }
 
     }
@@ -104,15 +108,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
          /*user = mAuth.getCurrentUser();*/
          if(requestActive == false) {
 
+
+
+             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+             Date date = new Date();
+             System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
+
+
+
+
                         /*mUserData.setValue(user.getUid());*/
-                        String key= "USER_ID";
-                        mPedidosRef.child(key).setValue(user.getUid());
+
+                      //  mPedidoU = mPedidosRef.push();
+                        mPedidoU.child("USER_ID").setValue(user.getUid());
+                        mPedidoU.child("Creado").setValue(dateFormat.format(date));
+                        mPedidoU.child("Conductor").setValue("Sin_Asignar");
+
+
+
 
                     // mData.setValue(user.getDisplayName()); //Enviar data a Firebase
                   //   mData.setValue(user.getEmail()); //Enviar data a Firebase
                   //   mUserData.child("tipo").setValue("pasajero");
                      sendData.setText("Cancelar Taxista"); //Cambiar texto del Boton
                      requestActive = true;
+
+
+
 
          }
 
