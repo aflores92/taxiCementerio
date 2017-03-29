@@ -83,6 +83,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
       //  if (location != null) {
 
             updateLocation(location);
+
+
        // }0
     }
 

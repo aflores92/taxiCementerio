@@ -95,7 +95,7 @@ public class Main5Activity extends Activity implements LocationListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent i = new Intent(getApplicationContext(),MapsActivity2.class);
+                Intent i = new Intent(Main5Activity.this,MapsActivity2.class);
                 i.putExtra("usuarioLatitud",location.getLatitude());
                 i.putExtra("usuarioLongitud",location.getLongitude());
                 startActivity(i);
