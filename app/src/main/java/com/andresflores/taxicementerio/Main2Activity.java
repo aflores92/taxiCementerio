@@ -94,7 +94,9 @@ public class Main2Activity extends Activity  {
                                 mData.child("Pasword").setValue(password);
                                 mData.child("Tipo").setValue("Pasajero");
 
-
+                                mNameField.setText("");
+                                mEmailFiedl.setText("");
+                                mPasswordField.setText("");
                                 Toast.makeText(Main2Activity.this, user_id, Toast.LENGTH_SHORT).show();
                             }
                         }

@@ -47,7 +47,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser(); //Obtener el Usuario con el que estoy logueado en la aplicacion
     private DatabaseReference mUserData = mPedidosRef.child(user.getUid()); //Obtener llave unica del Usuario
     private DatabaseReference mLocation = mRootRef.child("Localizacion");
-    private DatabaseReference mPedidoU = mPedidosRef.push();
+    private DatabaseReference mPedidoU;
+    String itemID;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1, 1, this);
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
+        itemID = mPedidosRef.push().getKey();
       //  if (location != null) {
 
             updateLocation(location);
@@ -95,11 +98,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if(requestActive) {
 
-            DatabaseReference mUserGeo = mPedidoU.child("geofire");
+            //DatabaseReference mUserGeo = mPedidoU.child("geofire");
           //mUserGeo.child("ID").setValue(user.getUid());
-            GeoFire geoFire = new GeoFire(mUserGeo);
-
-            geoFire.setLocation("Localizacion", new GeoLocation(location.getLatitude(),location.getLongitude()));
+            GeoFire geoFire = new GeoFire(mPedidosRef.child("Localizacion"));
+            geoFire.setLocation(itemID, new GeoLocation(location.getLatitude(),location.getLongitude()));
             //mUserGeo.child(user.getUid());
         }
 
@@ -122,9 +124,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         /*mUserData.setValue(user.getUid());*/
 
                       //  mPedidoU = mPedidosRef.push();
-                        mPedidoU.child("USER_ID").setValue(user.getUid());
-                        mPedidoU.child("Creado").setValue(dateFormat.format(date));
-                        mPedidoU.child("Conductor").setValue("Sin_Asignar");
+                        mPedidosRef.child(itemID).child("USER_ID").setValue(user.getUid());
+                          mPedidosRef.child(itemID).child("Creado").setValue(dateFormat.format(date));
+                             mPedidosRef.child(itemID).child("Conductor").setValue("Sin_Asignar");
 
 
 

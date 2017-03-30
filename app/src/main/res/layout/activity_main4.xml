@@ -37,12 +37,12 @@
         android:hint="Ingrese Contraseña"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="none"
+        android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/etxt_password"
         android:layout_below="@+id/etxt_email"
-        android:layout_alignLeft="@+id/etxt_email"
         android:layout_alignStart="@+id/etxt_email" />
+
 
 
 </RelativeLayout>

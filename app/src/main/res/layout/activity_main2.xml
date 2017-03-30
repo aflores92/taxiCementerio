@@ -31,16 +31,6 @@
         android:hint="Ingrese Correo"
         android:inputType="textEmailAddress" />
 
-    <EditText
-        android:id="@+id/etxt_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/etxt_email"
-        android:layout_alignRight="@+id/etxt_email"
-        android:layout_below="@+id/etxt_email"
-        android:hint="Ingrese Contraseña "
-        android:inputType="textPassword" />
-
     <Button
         android:text="Seleccione Aqui Para Ingresar"
         android:layout_width="wrap_content"
@@ -58,6 +48,15 @@
         android:text="Registrar"
         android:layout_below="@+id/etxt_password"
         android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/etxt_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ingrese Contraseña "
+        android:inputType="textPassword"
+        android:layout_below="@+id/etxt_email"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

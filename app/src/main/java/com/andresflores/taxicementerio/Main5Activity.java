@@ -112,20 +112,16 @@ public class Main5Activity extends Activity implements LocationListener {
 
 
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Pedidos");
-        ref.child("geofire");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Pedidos").child("Localizacion");
+       // ref.child("geofire");
+        GeoFire geoFire = new GeoFire(ref);
 
-        GeoFire geoFire = new GeoFire(ref.child("Localizacion"));
-
-
-        //GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(location.getLatitude(),location.getLongitude()), 0.6);
-/*
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(location.getLatitude(),location.getLongitude()), 0.6 );
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
-                listViewContent.clear();
-                listViewContent.add(key);
 
+               Log.i("prueba",String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
             }
 
             @Override
@@ -149,11 +145,8 @@ public class Main5Activity extends Activity implements LocationListener {
             }
         });
 
-        for (String objet:listViewContent){
 
-            Log.v("prueba_2",objet);
 
-        }*/
 
 
         /*ref.addChildEventListener(new ChildEventListener() {
