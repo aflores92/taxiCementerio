@@ -22,12 +22,17 @@ import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
 import com.firebase.geofire.LocationCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+
+import java.io.LineNumberReader;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -45,8 +50,12 @@ public class Main5Activity extends Activity implements LocationListener {
     ArrayList<String> usuario;
     ArrayList<Double> latitud;
     ArrayList<Double> longitud;
+    ArrayList<Location> posiciones;
     Location location;
-
+    ArrayList<Double> distancia;
+    Location pasajeroLocation;
+    ArrayList<String> transformacion;
+    boolean sinasignar = false;
 
 
 
@@ -57,11 +66,14 @@ public class Main5Activity extends Activity implements LocationListener {
         usuario = new ArrayList<String>();
         latitud = new ArrayList<Double>();
         longitud = new ArrayList<Double>();
+        posiciones = new ArrayList<Location>();
+        distancia = new ArrayList<Double>();
+        transformacion = new ArrayList<String>();
 
         listView = (ListView) findViewById(R.id.listView);
 
         listViewContent = new ArrayList<String>();
-        listViewContent.add("Prueba");
+        //listViewContent.add("Prueba");
         arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listViewContent);
         listView.setAdapter(arrayAdapter);
 
@@ -121,8 +133,69 @@ public class Main5Activity extends Activity implements LocationListener {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
 
-               Log.i("prueba",String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
+
+
+                mPedidosRef.child(key).orderByChild("Conductor").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                      String key = dataSnapshot.getKey();
+
+                      //  Map<String,String> map = dataSnapshot.getValue();
+                        //Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                        Map <String, String> map = (Map)dataSnapshot.getValue();
+                        String conductor = map.get("Conductor");
+                        String creado = map.get("Creado");
+                        String user_ide = map.get("USER_ID");
+
+                        Log.v("InformacionNueva",conductor);
+                        Log.v("llave",key);
+
+                        if ( conductor.equals("Sin_Asignar")){
+
+                            sinasignar = true;
+
+
+                        }
+
+                        else {
+
+                            sinasignar=false;
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                if (sinasignar){
+
+
+                    pasajeroLocation = new Location("LocationA");
+                    pasajeroLocation.setLatitude(location.latitude);
+                    pasajeroLocation.setLongitude(location.longitude);
+                    posiciones.add(pasajeroLocation);
+
+                    for (Location posicion : posiciones ) {
+                        Log.i("Posicion Informacion",posicion.toString() );
+
+                    }
+                    //listViewContent.add(key);
+                    // arrayAdapter.notifyDataSetChanged();
+
+                    Log.i("prueba",String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
+
+                }
+
+
             }
+
+
+
 
             @Override
             public void onKeyExited(String key) {
@@ -145,7 +218,28 @@ public class Main5Activity extends Activity implements LocationListener {
             }
         });
 
+        for (Location posicion : posiciones ) {
+            Log.i("Posicion  Saliendo ",posicion.toString() );
+        }
 
+        Location conductorLocation = new Location("LocationB");
+        conductorLocation.setLatitude(location.getLatitude());
+        conductorLocation.setLongitude(location.getLongitude());
+
+        for (Location posicion: posiciones){
+
+            transformacion.add(
+
+                    String.valueOf(
+                            Math.round(((pasajeroLocation.distanceTo(conductorLocation))*10)/10)) + " Metros");
+
+
+
+        }
+
+
+        listViewContent.addAll(transformacion);
+        arrayAdapter.notifyDataSetChanged();
 
 
 
@@ -233,6 +327,34 @@ public class Main5Activity extends Activity implements LocationListener {
     public void onProviderDisabled(String provider) {
 
     }
+
+   /* public double CalculationByDistance(LatLng StartP, LatLng EndP) {
+        int Radius = 6371;// radio de la tierra en  kilómetros
+        double lat1 = StartP.latitude;
+        double lat2 = EndP.latitude;
+        double lon1 = StartP.longitude;
+        double lon2 = EndP.longitude;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1))
+                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+                * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        double valueResult = Radius * c;
+        double km = valueResult / 1;
+        DecimalFormat newFormat = new DecimalFormat("####");
+        int kmInDec = Integer.valueOf(newFormat.format(km));
+        double meter = valueResult % 1000;
+        int meterInDec = Integer.valueOf(newFormat.format(meter));
+        Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
+                + " Meter   " + meterInDec);
+
+
+
+    }*/
+
+
 
 
 }

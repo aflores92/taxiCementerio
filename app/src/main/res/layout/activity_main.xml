@@ -33,8 +33,7 @@
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textStyle="normal|bold"
         android:layout_marginRight="16dp"
-        android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/button2" />
+        android:layout_above="@+id/button2" />
 
     <TextView
 
