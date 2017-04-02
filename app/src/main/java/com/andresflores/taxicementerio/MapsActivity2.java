@@ -22,6 +22,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -31,6 +35,11 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
     Intent i ;
     Double usuarioLatitud;
     Double usuarioLongitud;
+    Double pasajeroLatiud;
+    Double pasajeroLongitud;
+    String data;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser(); //Obtener el Usuario con el que estoy logueado en la aplicacion
+
 
 
 
@@ -47,6 +56,9 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
         else {
             usuarioLatitud = extras.getDouble("usuarioLatitud");
             usuarioLongitud = extras.getDouble("usuarioLongitud");
+            pasajeroLatiud = extras.getDouble("pasajeroLatitud");
+            pasajeroLongitud = extras.getDouble("pasajeroLongitud");
+            data = extras.getString("data");
         }
 
         Log.v("Prueba",usuarioLatitud.toString());
@@ -64,7 +76,7 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 ArrayList<Marker> markers = new ArrayList<Marker>();
                 markers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(usuarioLatitud,usuarioLongitud)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("Usted Esta Aqui Sr.Taxista")));
-                markers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(10.4842075,(-66.9145860))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).title("Te Amo Erika Att:Tu Esposo")));
+                markers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(pasajeroLatiud,pasajeroLongitud)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).title("Te Amo Erika Att:Tu Esposo")));
 
                 for(Marker marker : markers){
 
@@ -86,9 +98,15 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
 
     public void aceptarPasajero(View view) {
 
+        DatabaseReference reference =  FirebaseDatabase.getInstance().getReference().child("Pedidos")
+                .child(data).child("Conductor");
+
+        reference.setValue(user.getUid());
+
         Intent intent = new Intent(
                 Intent.ACTION_VIEW, Uri.parse(
-                "http://maps.google.com/maps?daddr=10.4842075,-66.9145860"
+                "http://maps.google.com/maps?daddr="+pasajeroLatiud+","+pasajeroLongitud+""
+
         )
 
 

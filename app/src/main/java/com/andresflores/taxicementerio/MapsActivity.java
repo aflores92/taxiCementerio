@@ -1,6 +1,8 @@
 package com.andresflores.taxicementerio;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -8,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 
@@ -49,23 +52,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private DatabaseReference mLocation = mRootRef.child("Localizacion");
     private DatabaseReference mPedidoU;
     String itemID;
+    //AlertDialog alert = null;
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
-
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+
+      /*  if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            AlertNoGps();
+        }*/
+
         sendData = (Button) findViewById(R.id.button6);
 
         mapFragment.getMapAsync(this);
 
-
         //  map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -83,16 +90,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
         itemID = mPedidosRef.push().getKey();
-      //  if (location != null) {
-
             updateLocation(location);
-
-
-       // }0
+        //GPS
     }
 
+/*    private void AlertNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("El sistema GPS esta desactivado, ¿Desea activarlo?")
+                .setCancelable(false)
+                .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
 
+        alert = builder.create();
+        alert.show();
+    }*/
 
+/*
+    @Override
+    protected void onDestroy() {
+        if(alert != null)
+        {
+            alert.dismiss ();
+        }
+    }
+*/
 
     public void updateLocation (Location location){
 
@@ -151,13 +180,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
              //Queary NoSql para conseguir mi Pedido
             // Query myCurrentUser = mPedidosRef.child("usuarios").child(user.getUid()).orderByChild("driverRequest").equalTo(null);
-             Query myCurrentUser = mPedidosRef.orderByChild("ID").equalTo(user.getUid());
+             Query myCurrentUser = mPedidosRef.orderByChild("USER_ID").equalTo(user.getUid());
 
              myCurrentUser.removeEventListener(new ValueEventListener() {
                  @Override
                  public void onDataChange(DataSnapshot dataSnapshot) {
 
-                     dataSnapshot.getRef().setValue(null); //ELiminar Pedido
+                    String remover = dataSnapshot.getKey() ; //ELiminar Pedido
+                     dataSnapshot.child(remover);
 
                  }
 
