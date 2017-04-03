@@ -26,19 +26,39 @@
         android:layout_alignParentStart="true" />
 
 
-
+    <Button
+        android:text="Confirmacion de Llegada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
+        android:id="@+id/button4"
+        android:onClick="listoConductor"
+        tools:text="Confirmacion de Llegada"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="95dp"
-        android:layout_marginBottom="79dp"
+        android:layout_marginBottom="11dp"
         android:id="@+id/button6"
         android:onClick="requestUber"
         tools:text="Solicitar Taxista"
-        android:text="Solicitar Taxista" />
+        android:text="Solicitar Taxista"
+        android:layout_above="@+id/button4"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="24dp" />
+
+    <TextView
+        android:text="Taxista En Camino"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="88dp"
+        android:id="@+id/textView3"
+        tools:text="Taxista En Camino" />
 
 
 </RelativeLayout>

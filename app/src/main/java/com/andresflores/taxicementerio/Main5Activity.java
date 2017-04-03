@@ -181,19 +181,33 @@ public class Main5Activity extends Activity implements LocationListener {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-                Pedido p = dataSnapshot.getValue(Pedido.class);
                 String keyPedidos = dataSnapshot.getKey();
-                Log.v("prueba5",keyPedidos);
-                if (p.getConductor().equals("Sin_Asignar")){
+                userIds.add(keyPedidos);
 
-                    pedidos.add(p);
-                    userIds.add(keyPedidos);
-                    puerta = true;
 
-                   // listViewContent.add(keyPedidos);
-                 //   arrayAdapter.notifyDataSetChanged();
+
+        /*        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+
+                for (DataSnapshot child : children){
+
+                    Pedido p = child.getValue(Pedido.class);
+
+                    if (("Sin_Asignar").equals(p.getConductor())){
+
+                        pedidos.add(p);
+                        userIds.add(keyPedidos);
+                        puerta = true;
+
+                        // listViewContent.add(keyPedidos);
+                        //   arrayAdapter.notifyDataSetChanged();
+
+                    }
 
                 }
+*/
+
+                Log.v("prueba5",keyPedidos);
+
 
             }
 
@@ -297,7 +311,7 @@ public class Main5Activity extends Activity implements LocationListener {
 
             private void  addUserListener (String userId){
                 Log.v("usuariosIdLlaves",userId);
-                mPedidosRef.child(userId).addValueEventListener(userValueListener);
+                mPedidosRef.child(userId).addListenerForSingleValueEvent(userValueListener);
                 userIdsWithListener.add(userId);
 
 

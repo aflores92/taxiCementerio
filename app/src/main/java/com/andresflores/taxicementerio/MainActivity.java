@@ -31,7 +31,7 @@ public class MainActivity extends Activity  {
 
         //Almacenar Dato del boton
         mRegisterButton = (Button) findViewById(R.id.button2);
-        /*getSupportActionBar().hide();*/
+       // getSupportActionBar().hide();
 
         //Pasar A Segunda Pantalla
         mRegisterButton.setOnClickListener(new View.OnClickListener() {

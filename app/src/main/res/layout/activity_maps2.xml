@@ -39,5 +39,17 @@ android:layout_height="match_parent"
         tools:text="Acpetar Pasajero"
         android:text="Acpetar Pasajero" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
+        android:id="@+id/button7"
+        android:onClick="listoPasajero"
+        tools:text="Listo"
+        android:text="Listo" />
+
 
 </RelativeLayout>

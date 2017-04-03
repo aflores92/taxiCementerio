@@ -8,11 +8,14 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
@@ -29,6 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
@@ -52,7 +56,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private DatabaseReference mLocation = mRootRef.child("Localizacion");
     private DatabaseReference mPedidoU;
     String itemID;
+    String guardarllave;
+    Handler handler = new Handler();
     //AlertDialog alert = null;
+    private Button confirmacion;
+    private TextView mensaje;
 
 
 
@@ -69,6 +77,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }*/
 
         sendData = (Button) findViewById(R.id.button6);
+        confirmacion = (Button) findViewById(R.id.button4);
+        confirmacion.setVisibility(View.INVISIBLE);
+
+        mensaje = (TextView) findViewById(R.id.textView3);
+        mensaje.setVisibility(View.INVISIBLE);
+
 
         mapFragment.getMapAsync(this);
 
@@ -123,7 +137,127 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 */
 
-    public void updateLocation (Location location){
+    public void updateLocation (final Location location){
+
+        if (requestActive==false){
+
+            DatabaseReference verificar = FirebaseDatabase.getInstance().getReference()
+                    .child("Pedidos")/*.child(itemID)*/;
+            verificar.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+
+                    for (DataSnapshot child : children){
+
+
+                        Pedido p = child.getValue(Pedido.class);
+
+                        if ( user.getUid().equals(p.getUSER_ID())){
+
+                            requestActive = true;
+                            itemID = child.getKey();
+                        }
+
+
+                    }
+
+
+                  /*  Log.v("Verficando1",dataSnapshot.exists()?"Si_Existe":"NoExiste");
+                    Log.v("Verficando2",dataSnapshot.hasChildren()?"Si_Existe":"NoExiste");
+                    Log.v("Verficando3",dataSnapshot.getValue()!= null?"Si_Existe":"NoExiste");
+*/
+
+
+             /*       if (dataSnapshot.exists())
+                    {
+
+                        Pedido p = dataSnapshot.getValue(Pedido.class);
+
+                        if ( user.getUid().equals(p.getUSER_ID())){
+
+                            requestActive = true;
+                        }
+                    }*/
+
+            }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            DatabaseReference buscar = FirebaseDatabase.getInstance().getReference()
+                    .child("Confirmacion")/*.child(itemID)*/;
+            buscar.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+
+                    for (DataSnapshot child : children){
+
+                        Confirmacion c = child.getValue(Confirmacion.class);
+
+                        if ("En_Progreso".equals(c.getCompletado())&& user.getUid().equals(c.getUSER_ID())){
+
+                            requestActive = false;
+                            sendData.setVisibility(View.INVISIBLE);
+                            itemID = child.getKey();
+                            mensaje.setVisibility(View.VISIBLE);
+
+
+                        }
+
+                        if ("Listo".equals(c.getCompletado()) && user.getUid().equals(c.getUSER_ID())){
+
+                            requestActive= false;
+                            confirmacion.setVisibility(View.VISIBLE);
+                            itemID = child.getKey();
+                            sendData.setVisibility(View.INVISIBLE);
+
+
+
+                        }
+
+
+
+
+                    }
+
+
+                  /*  Log.v("Verficando5",dataSnapshot.exists()?"Si_Existe":"NoExiste");
+                    Log.v("Verficando6",dataSnapshot.hasChildren()?"Si_Existe":"NoExiste");
+                    Log.v("Verficando7",dataSnapshot.getValue()!= null?"Si_Existe":"NoExiste");
+
+
+                Confirmacion c = dataSnapshot.getValue(Confirmacion.class);
+
+
+
+                    if (dataSnapshot.exists()){
+
+                        if ("En_Progreso".equals(c.getCompletado())){
+
+                            requestActive = true;
+                            sendData.setVisibility(View.INVISIBLE);
+
+                        }
+
+                    }
+*/
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
 
         if(requestActive) {
 
@@ -132,7 +266,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             GeoFire geoFire = new GeoFire(mPedidosRef.child("Localizacion"));
             geoFire.setLocation(itemID, new GeoLocation(location.getLatitude(),location.getLongitude()));
             //mUserGeo.child(user.getUid());
+
+
         }
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                updateLocation(location);
+            }
+        },2000);
 
     }
 
@@ -157,10 +300,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                           mPedidosRef.child(itemID).child("Creado").setValue(dateFormat.format(date));
                              mPedidosRef.child(itemID).child("Conductor").setValue("Sin_Asignar");
 
+             DatabaseReference aceptacion = FirebaseDatabase.getInstance().getReference()
+                     .child("Confirmacion").child(itemID);
+
+             aceptacion.child("USER_ID").setValue(user.getUid());
+             aceptacion.child("Completado").setValue("Por_Atender");
 
 
 
-                    // mData.setValue(user.getDisplayName()); //Enviar data a Firebase
+             // mData.setValue(user.getDisplayName()); //Enviar data a Firebase
                   //   mData.setValue(user.getEmail()); //Enviar data a Firebase
                   //   mUserData.child("tipo").setValue("pasajero");
                      sendData.setText("Cancelar Taxista"); //Cambiar texto del Boton
@@ -177,12 +325,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
              sendData.setText("Conseguir Taxista"); //Cambiar texto del Boton
              requestActive = false;
+             mPedidosRef.child(itemID).removeValue();
+             mPedidosRef.child("Localizacion").child(itemID).removeValue();
+             DatabaseReference borraAceptacion = FirebaseDatabase.getInstance().getReference()
+                     .child("Confirmacion").child(itemID);
+             borraAceptacion.removeValue();
 
              //Queary NoSql para conseguir mi Pedido
             // Query myCurrentUser = mPedidosRef.child("usuarios").child(user.getUid()).orderByChild("driverRequest").equalTo(null);
-             Query myCurrentUser = mPedidosRef.orderByChild("USER_ID").equalTo(user.getUid());
+             //Query myCurrentUser = mPedidosRef.orderByChild("USER_ID").equalTo(user.getUid());
 
-             myCurrentUser.removeEventListener(new ValueEventListener() {
+            /* myCurrentUser.removeEventListener(new ValueEventListener() {
                  @Override
                  public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -197,7 +350,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                  public void onCancelled(DatabaseError databaseError) {
 
                  }
-             });
+             });*/
 
          }
 
@@ -240,6 +393,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
 
+
+
+
+
+    }
+
+    public void listoConductor(View view){
+
+
+        requestActive = false;
+        mPedidosRef.child(itemID).removeValue();
+        mPedidosRef.child("Localizacion").child(itemID).removeValue();
+        DatabaseReference borraAceptacion = FirebaseDatabase.getInstance().getReference()
+                .child("Confirmacion").child(itemID);
+        borraAceptacion.removeValue();
 
 
 
